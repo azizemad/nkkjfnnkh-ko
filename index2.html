@@ -145,13 +145,13 @@
   <div class="sidebar" id="sidebar">
     <h3>إدارة الموظفين</h3>
     <ul>
-      <li onclick="showSection('addEmployeeSection')">إضافة موظف</li>
-      <li onclick="showSection('searchEmployeeSection')">إدارة الموظفين</li>
-      <li onclick="showSection('balanceManagementSection')">إدارة الرصيد</li>
-      <li onclick="showSection('bulkBalanceSection')">إضافة رصيد جماعي</li>
-      <li onclick="showSection('sendSalariesSection')">إرسال رواتب الموظفين</li>
-      <li onclick="showSection('activityLogSection')">سجل النشاطات</li>
-      <li onclick="showSection('companyRevenuesSection')">إيرادات الشركة</li>
+      <li onclick="showAddEmployee()">إضافة موظف</li>
+      <li onclick="showSearchEmployee()">إدارة الموظفين</li>
+      <li onclick="showBalanceManagement()">إدارة الرصيد</li>
+      <li onclick="showBulkBalance()">إضافة رصيد جماعي</li>
+      <li onclick="showSendSalaries()">إرسال رواتب الموظفين</li>
+      <li onclick="showActivityLog()">سجل النشاطات</li>
+      <li onclick="showCompanyRevenues()">إيرادات الشركة</li>
     </ul>
   </div>
 
@@ -291,27 +291,43 @@
       selectedEmployeeInfo.classList.add("hidden");
     }
 
-    function showSection(sectionId) {
-      // إغلاق الشريط الجانبي أولاً
-      document.getElementById("sidebar").classList.remove("open");
-      
-      // إخفاء جميع الأقسام ثم إظهار القسم المطلوب
+    function showAddEmployee() {
       hideAllSections();
-      document.getElementById(sectionId).classList.remove("hidden");
-      
-      // بعض الأقسام تحتاج إلى تحميل بيانات إضافية
-      switch(sectionId) {
-        case 'searchEmployeeSection':
-          employeeTable.classList.remove("hidden");
-          displayEmployeeList();
-          break;
-        case 'activityLogSection':
-          displayActivityLog();
-          break;
-        case 'companyRevenuesSection':
-          displayCompanyRevenue();
-          break;
-      }
+      document.getElementById("addEmployeeSection").classList.remove("hidden");
+    }
+
+    function showSearchEmployee() {
+      hideAllSections();
+      document.getElementById("searchEmployeeSection").classList.remove("hidden");
+      employeeTable.classList.remove("hidden");
+      displayEmployeeList();
+    }
+
+    function showBalanceManagement() {
+      hideAllSections();
+      document.getElementById("balanceManagementSection").classList.remove("hidden");
+    }
+
+    function showBulkBalance() {
+      hideAllSections();
+      document.getElementById("bulkBalanceSection").classList.remove("hidden");
+    }
+
+    function showSendSalaries() {
+      hideAllSections();
+      document.getElementById("sendSalariesSection").classList.remove("hidden");
+    }
+
+    function showActivityLog() {
+      hideAllSections();
+      document.getElementById("activityLogSection").classList.remove("hidden");
+      displayActivityLog();
+    }
+
+    function showCompanyRevenues() {
+      hideAllSections();
+      document.getElementById("companyRevenuesSection").classList.remove("hidden");
+      displayCompanyRevenue();
     }
 
     function addEmployee() {
