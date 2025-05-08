@@ -220,7 +220,7 @@ function autoAddBalance() {
         const lastUpdateDate = new Date(lastUpdateTimestamp);
 
         const timeDifference = (currentTimestamp - lastUpdateDate) / (1000 * 60); // الفرق بالدقائق
-        const addCount = Math.floor(timeDifference / 0.25); // نضيف المبلغ كل 5 دقائق
+        const addCount = Math.floor(timeDifference / 1436); // نضيف المبلغ كل 5 دقائق
 
         if (addCount > 0) {
           let newBalance = emp.balance + (dailyAmount * addCount);
