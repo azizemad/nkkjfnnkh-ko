@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الشركة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <!-- أضف CSS هنا -->
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <span class="sidebar-toggle" onclick="toggleSidebar()">☰</span>
+    <span class="company-name">إدارة شركة شغلني</span>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h3>إدارة الموظفين</h3>
+    <ul>
+      <li onclick="showAddEmployee()">إضافة موظف</li>
+      <li onclick="showSearchEmployee()">إدارة الموظفين</li>
+      <li onclick="showActivityLog()">سجل النشاطات</li>
+      <li onclick="showCompanyRevenues()">إيرادات الشركة</li>
+    </ul>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <h2>إدارة الشركة</h2>
+
+    <!-- Add Employee -->
+    <div id="addEmployeeSection" class="hidden">
+      <h3>إضافة موظف</h3>
+      <input type="text" id="employeeName" placeholder="اسم الموظف" />
+      <input type="text" id="employeePhone" placeholder="رقم الهاتف" />
+      <input type="number" id="dailyAmount" placeholder="المبلغ اليومي" />
+      <button onclick="addEmployee()">إضافة موظف</button>
+    </div>
+
+    <!-- Search Employee -->
+    <div id="searchEmployeeSection" class="hidden">
+      <h3>بحث بالاسم أو رقم الهاتف</h3>
+      <input type="text" id="searchName" placeholder="بحث عن الموظف" oninput="searchEmployee()" />
+    </div>
+
+    <!-- Employee Table -->
+    <table id="employeeTable" class="hidden" style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #1abc9c; color: white;">
+          <th>الاسم</th>
+          <th>الرصيد</th>
+          <th>المعرف</th>
+          <th>رقم الهاتف</th>
+          <th>حالة</th>
+          <th>إدارة</th>
+        </tr>
+      </thead>
+      <tbody id="employeeTableBody"></tbody>
+    </table>
+
+    <!-- Balance Management -->
+    <div id="balanceManagementSection" class="hidden">
+      <h3>إدارة الرصيد</h3>
+      <div id="selectedEmployeeInfo" class="hidden">
+        <p id="selectedEmployeeName"></p>
+        <p id="selectedEmployeeBalance">الرصيد الحالي: 0</p>
+        <input type="number" id="balanceChange" placeholder="قيمة الرصيد" />
+        <button onclick="updateBalance('increase')">زيادة</button>
+        <button onclick="updateBalance('decrease')">خصم</button>
+      </div>
+    </div>
+
+    <!-- Activity Log -->
+    <div id="activityLogSection" class="hidden activity-log">
+      <h3>سجل النشاطات</h3>
+      <table style="width: 100%; text-align: center;" id="activityLogList">
+        <thead>
+          <tr style="background-color: #1abc9c; color: white;">
+            <th>الوقت</th>
+            <th>النشاط</th>
+          </tr>
+        </thead>
+        <tbody id="activityLogTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Company Revenues -->
+    <div id="companyRevenuesSection" class="hidden">
+      
+      <p id="companyRevenueDisplay">الرصيد الحالي: 0</p>
+      <input type="number" id="companyRevenueAmount" placeholder="قيمة الرصيد" />
+      <button onclick="updateCompanyRevenue('increase')">إضافة</button>
+      <button onclick="updateCompanyRevenue('decrease')">خصم</button>
+    </div>
+  </div>
+
+ <script src="script.js"></script>
+
+
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <h3>إدارة الموظفين</h3>
+    <ul>
+      <li onclick="showAddEmployee()">إضافة موظف</li>
+      <li onclick="showSearchEmployee()">إدارة الموظفين</li>
+      <li onclick="showActivityLog()">سجل النشاطات</li>
+      <li onclick="showCompanyRevenues()">إيرادات الشركة</li>
+    </ul>
+   
+  </div>
+
+  
+    
+
+    <!-- Search Employee -->
+    <div id="searchEmployeeSection" class="hidden">
+      <h3>بحث بالاسم أو ID</h3>
+      <input type="text" id="searchName" placeholder="بحث عن الموظف" oninput="searchEmployee()" />
+    </div>
+
+    <!-- Employee Table -->
+    <table id="employeeTable" class="hidden" style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #1abc9c; color: white;">
+          <th>الاسم</th>
+          <th>الرصيد</th>
+          <th>المعرف</th>
+          <th>رقم الهاتف</th>
+          <th>حالة الموظف</th>
+          <th>إدارة</th>
+        </tr>
+      </thead>
+      <tbody id="employeeTableBody"></tbody>
+    </table>
+
+    <!-- Balance Management -->
+    <div id="balanceManagementSection" class="hidden">
+      <h3>إدارة الرصيد</h3>
+      <div id="selectedEmployeeInfo" class="hidden">
+        <p id="selectedEmployeeName"></p>
+        <p id="selectedEmployeeBalance">الرصيد الحالي: 0</p>
+        <input type="number" id="balanceChange" placeholder="قيمة الرصيد" />
+        <button onclick="updateBalance('increase')">زيادة</button>
+        <button onclick="updateBalance('decrease')">خصم</button>
+      </div>
+    </div>
+
+    <!-- Activity Log -->
+    <div id="activityLogSection" class="hidden activity-log">
+      <h3>سجل النشاطات</h3>
+      <table style="width: 100%; text-align: center;" id="activityLogList">
+        <thead>
+          <tr style="background-color: #1abc9c; color: white;">
+            <th>الوقت</th>
+            <th>النشاط</th>
+          </tr>
+        </thead>
+        <tbody id="activityLogTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Company Revenues -->
+    <div id="companyRevenuesSection" class="hidden">
+      <h3>إيرادات الشركة</h3>
+      <p id="companyRevenueDisplay">الرصيد الحالي: 0</p>
+      <input type="number" id="companyRevenueAmount" placeholder="قيمة الرصيد" />
+      <button onclick="updateCompanyRevenue('increase')">إضافة</button>
+      <button onclick="updateCompanyRevenue('decrease')">خصم</button>
+ 
+      
+    </div>
+  </div>
+  <button onclick="window.location.href='index3.html'" style="padding: 10px 20px; font-size: 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;"> اضغط هنا لعرض صفحه الحسابات</button>
+
+</body>
+</html>

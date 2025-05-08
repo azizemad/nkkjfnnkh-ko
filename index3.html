@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>عرض رصيد الشركة والمصروفات</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      padding: 20px;
+    }
+    h2 {
+      color: darkblue;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #aaa;
+    }
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #eee;
+    }
+    #totalExpenses {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📊 رصيد الشركة</h2>
+  <p id="companyBalance">جاري التحميل...</p>
+
+  <h2>💸 سجل المصروفات</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>العملية</th>
+        <th>المبلغ</th>
+      </tr>
+    </thead>
+    <tbody id="expensesTableBody">
+      <tr><td colspan="3">جاري التحميل...</td></tr>
+    </tbody>
+  </table>
+
+  <p id="totalExpenses">إجمالي المصروفات: جاري التحميل...</p>
+
+  <script>
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA7S0DeNhibbkcq8XXw3fTS_88hDPrfhxw",
+      authDomain: "aziz-891ae.firebaseapp.com",
+      databaseURL: "https://aziz-891ae-default-rtdb.firebaseio.com",
+      projectId: "aziz-891ae",
+      storageBucket: "aziz-891ae.appspot.com",
+      messagingSenderId: "399625100592",
+      appId: "1:399625100592:web:cb27b69a941e88b341bcf5",
+      measurementId: "G-JSD432PEB7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // عرض رصيد الشركة من حقل "balance"
+    function displayCompanyBalance() {
+      db.ref("companyRevenue").once("value", snapshot => {
+        const balance = snapshot.val();
+        const display = document.getElementById("companyBalance");
+        if (balance !== null) {
+          display.textContent = `${balance.toLocaleString()} جنيه`;
+        } else {
+          display.textContent = "لا يوجد رصيد مسجل.";
+        }
+      });
+    }
+
+    // استخراج المبلغ من activity وجمع المصروفات
+    function extractAmountFromActivity(activity) {
+      const regex = /مبلغ\s([\d,]+(?:\.\d{1,2})?)\s?من/; // تعبير منتظم لاستخراج الأرقام بعد "مبلغ" وقبل "جنيه"
+      const match = activity.match(regex);
+      if (match) {
+        return parseFloat(match[1].replace(",", "")); // إزالة الفواصل وتحويل النص إلى عدد عشري
+      }
+      return 0;
+    }
+
+    // عرض سجل المصروفات من activityLog وحساب الإجمالي
+    function displayExpensesLog() {
+      const tableBody = document.getElementById("expensesTableBody");
+      const totalExpensesDisplay = document.getElementById("totalExpenses");
+      tableBody.innerHTML = "";
+      let totalExpenses = 0; // متغير لحساب إجمالي المصروفات
+
+      db.ref("activityLog").once("value", snapshot => {
+        let hasData = false;
+        snapshot.forEach(child => {
+          const log = child.val();
+          if (log.activity.includes("خصم")) { // التأكد أن النشاط هو خصم
+            const amount = extractAmountFromActivity(log.activity); // استخراج المبلغ من activity
+            if (amount > 0) {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${log.timestamp}</td>
+                <td>${log.activity}</td>
+                <td>${amount.toLocaleString()} جنيه</td>
+              `;
+              tableBody.appendChild(row);
+
+              totalExpenses += amount; // إضافة المبلغ إلى الإجمالي
+              hasData = true;
+            }
+          }
+        });
+
+        if (!hasData) {
+          tableBody.innerHTML = "<tr><td colspan='3'>لا توجد مصروفات مسجلة.</td></tr>";
+          totalExpensesDisplay.textContent = "إجمالي المصروفات: لا توجد مصروفات.";
+        } else {
+          totalExpensesDisplay.textContent = `إجمالي المصروفات: ${totalExpenses.toLocaleString()} جنيه`;
+        }
+      });
+    }
+
+    // تحميل البيانات عند فتح الصفحة
+    window.onload = function() {
+      displayCompanyBalance();
+      displayExpensesLog();
+    };
+  </script>
+</body>
+</html>

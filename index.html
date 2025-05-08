@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول</title>
+  <style>
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      direction: rtl;
+    }
+    .login-box {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    input[type="password"] {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 15px;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>أدخل كلمة المرور للدخول</h2>
+    <input type="password" id="passwordInput" placeholder="كلمة المرور">
+    <br>
+    <button onclick="checkPassword()">دخول</button>
+    <div id="errorMsg" class="error"></div>
+  </div>
+
+  <script>
+    function checkPassword() {
+      var password = document.getElementById("passwordInput").value;
+      var errorMsg = document.getElementById("errorMsg");
+      if (password === "Ll112233445566l") {
+        window.location.href = "index2.html";
+      } else {
+        errorMsg.textContent = "كلمة المرور غير صحيحة!";
+      }
+    }
+  </script>
+</body>
+</html>    <div id="searchEmployeeSection" class="hidden">
+      <h3>بحث بالاسم أو رقم الهاتف</h3>
+      <input type="text" id="searchName" placeholder="بحث عن الموظف" oninput="searchEmployee()" />
+    </div>
+
+    <!-- Employee Table -->
+    <table id="employeeTable" class="hidden" style="width: 100%; text-align: center; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #1abc9c; color: white;">
+          <th>الاسم</th>
+          <th>الرصيد</th>
+          <th>المعرف</th>
+          <th>رقم الهاتف</th>
+          <th>حالة</th>
+          <th>إدارة</th>
+        </tr>
+      </thead>
+      <tbody id="employeeTableBody"></tbody>
+    </table>
+
+    <!-- Balance Management -->
+    <div id="balanceManagementSection" class="hidden">
+      <h3>إدارة الرصيد</h3>
+      <div id="selectedEmployeeInfo" class="hidden">
+        <p id="selectedEmployeeName"></p>
+        <p id="selectedEmployeeBalance">الرصيد الحالي: 0</p>
+        <input type="number" id="balanceChange" placeholder="قيمة الرصيد" />
+        <button onclick="updateBalance('increase')">زيادة</button>
+        <button onclick="updateBalance('decrease')">خصم</button>
+      </div>
+    </div>
+
+    <!-- Activity Log -->
+    <div id="activityLogSection" class="hidden activity-log">
+      <h3>سجل النشاطات</h3>
+      <table style="width: 100%; text-align: center;" id="activityLogList">
+        <thead>
+          <tr style="background-color: #1abc9c; color: white;">
+            <th>الوقت</th>
+            <th>النشاط</th>
+          </tr>
+        </thead>
+        <tbody id="activityLogTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Company Revenues -->
+    <div id="companyRevenuesSection" class="hidden">
+      
+      <p id="companyRevenueDisplay">الرصيد الحالي: 0</p>
+      <input type="number" id="companyRevenueAmount" placeholder="قيمة الرصيد" />
+      <button onclick="updateCompanyRevenue('increase')">إضافة</button>
+      <button onclick="updateCompanyRevenue('decrease')">خصم</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+ <script src="script.js"></script>
+</body>
+</html>
