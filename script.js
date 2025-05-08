@@ -191,7 +191,7 @@ function updateBalance(action) {
           }
 
           companyRevenueRef.set(newRevenue).then(() => {
-            logActivity(`تم خصم مبلغ ${amount} من إيرادات الشركة`);
+            logActivity(`تم خصم مبلغ ${amount} م إيرادات الشركة`);
           });
         });
       } else {
@@ -281,7 +281,7 @@ function updateCompanyRevenue(action) {
     } else if (action === "decrease") {
       if (newRevenue >= amount) {
         newRevenue -= amount;
-        logActivity(`تم خصم مبلغ ${amount} من إيرادات الشركة`);
+        logActivity(`تم خصم مبلغ ${amount} م إيرادات الشركة`);
       } else {
         alert("إيرادات الشركة غير كافية.");
         return;
